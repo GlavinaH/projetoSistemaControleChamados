@@ -1,0 +1,1 @@
+Projeto desenvolvido para criar um sistema de controle de chamados referentes a manutenção ou instalação de equipamentos, solicitados pelo cliente, onde a empresa recebe esses chamados e realiza o controle.
