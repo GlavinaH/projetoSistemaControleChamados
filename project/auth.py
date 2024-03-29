@@ -17,3 +17,11 @@ def logout():
 @auth.route('/inicio')
 def inicio():
     return render_template("inicio.html")
+
+@auth.route('/meus_equipamentos')
+def meus_equipamentos():
+    return render_template("meus_equipamentos.html")
+
+@auth.route('/criar_equipamento')
+def criar_equipamento():
+    return render_template("criar_equipamento.html")
