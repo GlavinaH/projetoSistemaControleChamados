@@ -3,21 +3,25 @@
 {% block content %}
 <div class="card p-4 rounded" style="max-width: 500px; margin: 0 auto; margin-top: 30px ; position: relative;">
     <h2 class="text-center mb-4 font-weight-bold" style="font-size: x-large;">Criar Equipamento</h2>
-    <div class="list-group">
+    <form action="/submit" method="POST">
+    <div class="row mb-3" style="align-items: center;">
         <div class="input-group mb-3">
-            <span class="input-group-text" id="marca_equip">Marca</span>
-            <input type="text" class="form-control" aria-label="marca_equip" aria-describedby="inputGroup-sizing-default">
+            <span class="input-group-text" id="marca">Marca</span>
+            <input type="text" class="form-control" id="marca" name="marca">
         </div>
         <div class="input-group mb-3">    
-            <span class="input-group-text" id="modelo_equip">Modelo</span>
-            <input type="text" class="form-control" aria-label="modelo_equip" aria-describedby="inputGroup-sizing-default">
+            <span class="input-group-text" id="modelo">Modelo</span>
+            <input type="text" class="form-control" id="modelo" name="modelo">
         </div>
         <div class="input-group mb-3">
-            <span class="input-group-text" id="serie_equip">Número de Série</span>
-            <input type="text" class="form-control" aria-label="serie_equip" aria-describedby="inputGroup-sizing-default">
+            <span class="input-group-text" id="numero_serie">Número de Série</span>
+            <input type="text" class="form-control" id="numero_serie" name="numero_serie">
         </div>
-        <a class="btn btn-secondary btn-sm" href="{{ url_for('auth.criar_equipamento') }}">Salvar</a>
-        <a class="btn btn-secondary btn-sm" href="{{ url_for('auth.meus_equipamentos') }}">Cancelar</a>
-    </div>
+        <div style="text-align: right;">
+        <button class="submit btn btn-primary">Salvar</button>
+        <a class="btn btn-secondary" href="{{ url_for('auth.meus_equipamentos') }}">Cancelar</a>
+        </div>
+        </form>        
+        </div>
 </div>
 {% endblock %}

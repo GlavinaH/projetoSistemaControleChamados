@@ -25,3 +25,4 @@ def meus_equipamentos():
 @auth.route('/criar_equipamento')
 def criar_equipamento():
     return render_template("criar_equipamento.html")
+
