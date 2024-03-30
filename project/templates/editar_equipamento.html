@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card p-4 rounded" style="max-width: 500px; margin: 0 auto; margin-top: 30px ; position: relative;">
+    <h2 class="text-center mb-4 font-weight-bold" style="font-size: x-large;">Editar Equipamento</h2>
+    <form action="/update/{{equipamento.id_equip}}" method="POST">
+    <div class="row mb-3" style="align-items: center;">
+        <div class="form-group mb-3">
+            <span class="input-group-text" id="marca">Marca</span>
+            <input type="text" class="form-control" id="marca" name="marca" value="{{equipamento.marca}}">
+        </div>
+        <div class="form mb-3">    
+            <span class="input-group-text" id="modelo">Modelo</span>
+            <input type="text" class="form-control" id="modelo" name="modelo" value="{{equipamento.modelo}}">
+        </div>
+        <div class="form mb-3">
+            <span class="input-group-text" id="numero_serie">Número de Série</span>
+            <input type="text" class="form-control" id="numero_serie" name="numero_serie" value="{{equipamento.numero_serie}}">
+        </div>
+        <div class="form-group" style="text-align: right;">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a class="btn btn-secondary" href="{{ url_for('meus_equipamentos') }}">Voltar</a>
+        </div>
+    </form>        
+    </div>
+</div>
+{% endblock %}
