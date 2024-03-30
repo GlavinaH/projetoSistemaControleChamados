@@ -71,8 +71,7 @@ def meus_equipamentos():
 @app.route('/edit/<id>', methods=['POST','GET'])
 def get_equipamento(id):
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    cur.execute(f'SELECT * FROM tb_equipamentos WHERE id_equip={id}')
-    cur.execute('SELECT * FROM tb_equipamentos ORDER BY id_equip ASC')  
+    cur.execute(f'SELECT * FROM tb_equipamentos WHERE id_equip={id}')  
     data=cur.fetchall()
     cur.close()
     print(data[0])
