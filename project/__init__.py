@@ -6,7 +6,8 @@ import psycopg2
 import psycopg2.extras
 
 def create_app():
-    app = Flask(__name__)
+    application = Flask(__name__)
+    app = application
 
     app.config['SECRET_KEY'] = 'p857111c9c9e05eb3cd3d6b18fa738a29777ab76760b6812a5079e938f8083589'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ud46diq0e2643u:p857111c9c9e05eb3cd3d6b18fa738a29777ab76760b6812a5079e938f8083589@cb4l59cdg4fg1k.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d1le26gb6kv12a'
