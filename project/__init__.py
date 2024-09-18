@@ -9,8 +9,8 @@ def create_app():
     application = Flask(__name__)
     app = application
 
-    app.config['SECRET_KEY'] = 'p857111c9c9e05eb3cd3d6b18fa738a29777ab76760b6812a5079e938f8083589'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ud46diq0e2643u:p857111c9c9e05eb3cd3d6b18fa738a29777ab76760b6812a5079e938f8083589@cb4l59cdg4fg1k.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d1le26gb6kv12a'
+    app.config['SECRET_KEY'] = '1234'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1234@localhost:5432/db-controle-chamados'
     
     # blueprint for auth routes in our app
     app.register_blueprint(auth_blueprint)
@@ -24,12 +24,13 @@ app = create_app()
 
 db = SQLAlchemy(app)
 
-DB_HOST="cb4l59cdg4fg1k.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com"
-DB_NAME="d1le26gb6kv12a"
-DB_USER="ud46diq0e2643u"
-DB_PASS="p857111c9c9e05eb3cd3d6b18fa738a29777ab76760b6812a5079e938f8083589"
+DB_HOST="localhost"
+DB_NAME="db-controle-chamados"
+DB_USER="postgres"
+DB_PASS="1234"
+DB_PORT="5432"
 
-conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST)
+conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
 
 class Equipamento(db.Model):
     __tablename__='tb_equipamentos'
