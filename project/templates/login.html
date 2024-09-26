@@ -3,13 +3,19 @@
 {% block content %}   
 <div class="card p-4 rounded" style="max-width: 500px; margin: 0 auto; margin-top: 30px ; position: relative;">
     <h2 class="text-center mb-4 font-weight-bold" style="font-size: x-large;">Login </h2>
-    <form action="/login" method="post">
+    <form action="/login" method="POST">
         <div class="mb-3">
             <label for="email" class="form-label" style="color: #000;">E-mail:</label>
             <input type="email" class="form-control" name="email" id="email">
             <div class="mb-3">
                 <label for="senha" class="form-label" style="color: #000;">Senha:</label>
                 <input type="password" class="form-control" name="senha" id="senha">
+        </div>
+        <div class="field">
+            <label class="checkbox">
+                <input type="checkbox">
+                Lembrar-me
+            </label>
         </div>
         <div class="mb-3" style="text-align: right;">
             <button class="btn btn-dark">

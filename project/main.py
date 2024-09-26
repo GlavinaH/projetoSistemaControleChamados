@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, flash, url_for, request
+from flask_login import login_required, current_user
 from . import db
 from .models import Equipamento
 import psycopg2
@@ -18,11 +19,13 @@ conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_
 def index():
     return render_template('home.html')
 
-@main.route('/profile')
-def profile():
-    return 'Profile'
-
+@main.route('/criar_equipamento')
+@login_required
+def criar_equipamento():
+    return render_template('criar_equipamento.html')
+    
 @main.route('/submit', methods=['POST'])
+@login_required
 def submit():
     marca = request.form['marca']
     modelo = request.form['modelo']
@@ -40,6 +43,7 @@ def submit():
     return render_template("meus_equipamentos.html", lista_equipamentos=lista_equipamentos)
 
 @main.route('/meus_equipamentos')
+@login_required
 def meus_equipamentos():
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     s = "SELECT * FROM tb_equipamentos ORDER BY id_equip ASC"
@@ -48,6 +52,7 @@ def meus_equipamentos():
     return render_template("meus_equipamentos.html", lista_equipamentos=lista_equipamentos)
 
 @main.route('/edit/<id>', methods=['POST','GET'])
+@login_required
 def get_equipamento(id):
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     cur.execute(f'SELECT * FROM tb_equipamentos WHERE id_equip={id}')  
@@ -57,6 +62,7 @@ def get_equipamento(id):
     return render_template('editar_equipamento.html', equipamento=data[0])
 
 @main.route('/update/<id>', methods=['POST'])
+@login_required
 def update_equip(id):
     if request.method == 'POST':
         marca = request.form['marca']
@@ -75,6 +81,7 @@ def update_equip(id):
         return redirect(url_for('main.meus_equipamentos'))
     
 @main.route('/delete/<id>', methods=['POST','GET'])
+@login_required
 def delete_equip(id):
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     cur.execute(f'DELETE FROM tb_equipamentos WHERE id_equip={id}')

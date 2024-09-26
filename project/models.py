@@ -13,9 +13,9 @@ class Equipamento(db.Model):
         self.modelo=modelo
         self.numero_serie=numero_serie
 
-class Usuario(db.Model):
+class Usuario(UserMixin, db.Model):
     __tablename__='tb_usuarios'
-    id_empresa = db.Column(db.Integer,primary_key=True)    
+    id = db.Column(db.Integer,primary_key=True)    
     empresa = db.Column(db.String(100))
     endereco = db.Column(db.String(100))
     cidade = db.Column(db.String(50))
