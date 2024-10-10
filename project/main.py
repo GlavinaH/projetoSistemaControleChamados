@@ -24,7 +24,7 @@ def index():
 def criar_equipamento():
     return render_template('criar_equipamento.html')
     
-@main.route('/submit', methods=['POST'])
+@main.route('/submit_equipamento', methods=['POST'])
 @login_required
 def submit():
     marca = request.form['marca']
@@ -51,7 +51,7 @@ def meus_equipamentos():
     lista_equipamentos=cur.fetchall()
     return render_template("meus_equipamentos.html", lista_equipamentos=lista_equipamentos)
 
-@main.route('/edit/<id>', methods=['POST','GET'])
+@main.route('/edit_equipamento/<id>', methods=['POST','GET'])
 @login_required
 def get_equipamento(id):
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -82,7 +82,7 @@ def update_equip(id):
         conn.commit()
         return redirect(url_for('main.meus_equipamentos'))
     
-@main.route('/delete/<id>', methods=['POST','GET'])
+@main.route('/delete_equipamento/<id>', methods=['POST','GET'])
 @login_required
 def delete_equip(id):
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -90,3 +90,30 @@ def delete_equip(id):
     conn.commit()
     flash('Equipamento removido com sucesso')
     return redirect(url_for('main.meus_equipamentos'))
+
+@main.route('/submit_chamado', methods=['POST'])
+@login_required
+def submit():
+    marca = request.form['marca']
+    modelo = request.form['modelo']
+    numero_serie = request.form['numero_serie']
+    id_usuario = current_user.id
+
+    equipamento = Equipamento(marca,modelo,numero_serie,id_usuario)
+    db.session.add(equipamento)
+    db.session.commit()
+    flash("Equipamento adicionado com sucesso.")
+    
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur.execute(f'SELECT * FROM tb_equipamentos WHERE id_usuario={id_usuario} ORDER BY id_equip ASC')
+    lista_equipamentos=cur.fetchall()
+    return render_template("meus_equipamentos.html", lista_equipamentos=lista_equipamentos)
+
+@main.route('/meus_chamados')
+@login_required
+def meus_equipamentos():
+    id_usuario = current_user.id
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur.execute(f'SELECT * FROM tb_equipamentos WHERE id_usuario={id_usuario} ORDER BY id_equip ASC')
+    lista_equipamentos=cur.fetchall()
+    return render_template("meus_equipamentos.html", lista_equipamentos=lista_equipamentos)
