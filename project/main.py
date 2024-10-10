@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, flash, url_for, request
 from flask_login import login_required, current_user
 from . import db
-from .models import Equipamento
+from .models import Equipamento, Usuario
 import psycopg2
 import psycopg2.extras
 
@@ -30,24 +30,24 @@ def submit():
     marca = request.form['marca']
     modelo = request.form['modelo']
     numero_serie = request.form['numero_serie']
+    id_usuario = current_user.id
 
-    equipamento = Equipamento(marca,modelo,numero_serie)
+    equipamento = Equipamento(marca,modelo,numero_serie,id_usuario)
     db.session.add(equipamento)
     db.session.commit()
     flash("Equipamento adicionado com sucesso.")
     
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    s = "SELECT * FROM tb_equipamentos"
-    cur.execute(s)
+    cur.execute(f'SELECT * FROM tb_equipamentos WHERE id_usuario={id_usuario} ORDER BY id_equip ASC')
     lista_equipamentos=cur.fetchall()
     return render_template("meus_equipamentos.html", lista_equipamentos=lista_equipamentos)
 
 @main.route('/meus_equipamentos')
 @login_required
 def meus_equipamentos():
+    id_usuario = current_user.id
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    s = "SELECT * FROM tb_equipamentos ORDER BY id_equip ASC"
-    cur.execute(s)
+    cur.execute(f'SELECT * FROM tb_equipamentos WHERE id_usuario={id_usuario} ORDER BY id_equip ASC')
     lista_equipamentos=cur.fetchall()
     return render_template("meus_equipamentos.html", lista_equipamentos=lista_equipamentos)
 
@@ -69,13 +69,15 @@ def update_equip(id):
         modelo = request.form['modelo']
         numero_serie = request.form['numero_serie']
         
+        id_usuario = current_user.id
+        
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute(f'''UPDATE tb_equipamentos
                         SET marca='{marca}',
                         modelo='{modelo}',
                         numero_serie='{numero_serie}'
                         WHERE id_equip={id}''')
-        cur.execute('SELECT * FROM tb_equipamentos ORDER BY id_equip ASC')       
+        cur.execute(f'SELECT * FROM tb_equipamentos WHERE id_usuario={id_usuario} ORDER BY id_equip ASC')       
         flash("Equipamento atualizado com sucesso.")
         conn.commit()
         return redirect(url_for('main.meus_equipamentos'))

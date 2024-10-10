@@ -7,11 +7,14 @@ class Equipamento(db.Model):
     marca = db.Column(db.String(30))
     modelo = db.Column(db.String(30))
     numero_serie = db.Column(db.String(50))
+    id_usuario = db.Column(db.Integer, db.ForeignKey('tb_usuarios.id'))
     
-    def __init__(self,marca,modelo,numero_serie):
+    def __init__(self,marca,modelo,numero_serie,id_usuario):
         self.marca=marca
         self.modelo=modelo
         self.numero_serie=numero_serie
+        self.id_usuario=id_usuario
+
 
 class Usuario(UserMixin, db.Model):
     __tablename__='tb_usuarios'
@@ -34,3 +37,4 @@ class Usuario(UserMixin, db.Model):
         self.telefone = telefone
         self.email = email
         self.senha = senha     
+        
