@@ -19,29 +19,6 @@ conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_
 def index():
     return render_template('home.html')
 
-@main.route('/criar_equipamento')
-@login_required
-def criar_equipamento():
-    return render_template('criar_equipamento.html')
-    
-@main.route('/submit_equipamento', methods=['POST'])
-@login_required
-def submit():
-    marca = request.form['marca']
-    modelo = request.form['modelo']
-    numero_serie = request.form['numero_serie']
-    id_usuario = current_user.id
-
-    equipamento = Equipamento(marca,modelo,numero_serie,id_usuario)
-    db.session.add(equipamento)
-    db.session.commit()
-    flash("Equipamento adicionado com sucesso.")
-    
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    cur.execute(f'SELECT * FROM tb_equipamentos WHERE id_usuario={id_usuario} ORDER BY id_equip ASC')
-    lista_equipamentos=cur.fetchall()
-    return render_template("meus_equipamentos.html", lista_equipamentos=lista_equipamentos)
-
 @main.route('/meus_equipamentos')
 @login_required
 def meus_equipamentos():
@@ -91,7 +68,12 @@ def delete_equip(id):
     flash('Equipamento removido com sucesso')
     return redirect(url_for('main.meus_equipamentos'))
 
-@main.route('/submit_chamado', methods=['POST'])
+@main.route('/criar_equipamento')
+@login_required
+def criar_equipamento():
+    return render_template('criar_equipamento.html')
+    
+@main.route('/submit_equipamento', methods=['POST'])
 @login_required
 def submit():
     marca = request.form['marca']
@@ -108,12 +90,42 @@ def submit():
     cur.execute(f'SELECT * FROM tb_equipamentos WHERE id_usuario={id_usuario} ORDER BY id_equip ASC')
     lista_equipamentos=cur.fetchall()
     return render_template("meus_equipamentos.html", lista_equipamentos=lista_equipamentos)
-
+    
 @main.route('/meus_chamados')
 @login_required
-def meus_equipamentos():
+def meus_chamados():
     id_usuario = current_user.id
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur.execute(f'SELECT * FROM tb_chamados WHERE id_usuario={id_usuario} ORDER BY id_chamado ASC')
+    lista_chamados=cur.fetchall()
+    return render_template("meus_chamados.html", lista_chamados=lista_chamados)
+
+@main.route('/criar_chamado', methods=["POST","GET"])
+@login_required
+def criar_chamado():
+    id_usuario = current_user.id
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur.execute(f'SELECT id_equip FROM tb_equipamentos WHERE id_usuario={id_usuario} ORDER BY id_equip ASC')
+    id_equipamentos=cur.fetchall()
+    print(id_equipamentos)    
+    return render_template('criar_chamado.html', id_equipamentos=id_equipamentos)
+
+@main.route('/submit_chamado', methods=['POST'])
+@login_required
+def submit_chamado():
+    marca = request.form['marca']
+    modelo = request.form['modelo']
+    numero_serie = request.form['numero_serie']
+    id_usuario = current_user.id
+
+    equipamento = Equipamento(marca,modelo,numero_serie,id_usuario)
+    db.session.add(equipamento)
+    db.session.commit()
+    flash("Equipamento adicionado com sucesso.")
+    
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     cur.execute(f'SELECT * FROM tb_equipamentos WHERE id_usuario={id_usuario} ORDER BY id_equip ASC')
     lista_equipamentos=cur.fetchall()
     return render_template("meus_equipamentos.html", lista_equipamentos=lista_equipamentos)
+
+

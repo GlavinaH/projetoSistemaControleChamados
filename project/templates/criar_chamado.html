@@ -3,23 +3,42 @@
 {% block content %}
 <div class="card p-4 rounded" style="max-width: 500px; margin: 0 auto; margin-top: 30px ; position: relative;">
     <h2 class="text-center mb-4 font-weight-bold" style="font-size: x-large;">Criar Chamado</h2>
-    <form action="/submit" method="POST">
+    <form action="/submit_chamado" method="POST">
     <div class="row mb-3" style="align-items: center;">
-        <div class="input-group mb-3">
-            <span class="input-group-text" id="marca">Marca</span>
-            <input type="text" class="form-control" id="marca" name="marca">
+        <div>
+        <select name="idEquip" class="form-select">
+            <option selected>Selecione a ID do Equipamento</option>
+            {% for row in id_equipamentos %}
+                <option value={{row.id_equip}}>{{row.id_equip}}</option>
+            {% endfor %}
+        </select>
         </div>
-        <div class="input-group mb-3">    
-            <span class="input-group-text" id="modelo">Modelo</span>
-            <input type="text" class="form-control" id="modelo" name="modelo">
+        <br>
+        <br>
+        <div>
+        <h6>Garantia</h6>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="opcoesGarantia" id="garantiaSim" value="Sim">
+            <label class="form-check-label" for="garantiaSim">Sim</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="opcoesGarantia" id="garantiaNao" value="Não">
+            <label class="form-check-label" for="garantiaNao">Não</label>
+          </div>
         </div>
-        <div class="input-group mb-3">
-            <span class="input-group-text" id="numero_serie">Número de Série</span>
-            <input type="text" class="form-control" id="numero_serie" name="numero_serie">
+          <br>
+          <br>
+          <br>
+        <div>
+          <div class="form-floating">
+            <textarea class="form-control" placeholder="Descricao do defeito" id="descricaoDefeito" style="height: 100px"></textarea>
+            <label for="descricaoDefeito">Descreva o defeito...</label>
+          </div>
         </div>
-        <div style="text-align: right;">
-        <button class="submit btn btn-primary">Salvar</button>
-        <a class="btn btn-secondary" href="{{ url_for('main.meus_equipamentos') }}">Voltar</a>
+        <div style="text-align: right; padding-top: 20px;">
+        <button class="submit btn btn-primary">Criar Chamado</button>
+        <a class="btn btn-secondary" href="{{ url_for('main.meus_chamados') }}">Voltar</a>
+        </div>
         </div>
         </form>        
         </div>

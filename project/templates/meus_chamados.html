@@ -8,7 +8,9 @@
             <thead>
                 <tr>
                     <td>ID Chamado</td>
+                    <td>Garantia</td>
                     <td>ID Equipamento</td>
+                    <td>Descrição do Defeito</td>
                     <td>Criado em</td>
                 </tr>
             </thead>
@@ -27,7 +29,7 @@
             </tbody>
 
         </table>
-    <a class="btn btn-secondary btn-sm" href="{{ url_for('main.criar_equipamento') }}">Criar Equipamento</a>
+    <a class="btn btn-secondary btn-sm" href="{{ url_for('main.criar_chamado') }}">Criar Chamado</a>
     </div>  
 </div>
 {% endblock %}
