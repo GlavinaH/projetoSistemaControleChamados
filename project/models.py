@@ -10,10 +10,10 @@ class Equipamento(db.Model):
     id_usuario = db.Column(db.Integer, db.ForeignKey('tb_usuarios.id'))
     
     def __init__(self,marca,modelo,numero_serie,id_usuario):
-        self.marca=marca
-        self.modelo=modelo
-        self.numero_serie=numero_serie
-        self.id_usuario=id_usuario
+        self.marca = marca
+        self.modelo = modelo
+        self.numero_serie = numero_serie
+        self.id_usuario = id_usuario
 
 
 class Usuario(UserMixin, db.Model):
@@ -37,4 +37,22 @@ class Usuario(UserMixin, db.Model):
         self.telefone = telefone
         self.email = email
         self.senha = senha     
-        
+
+class Chamado(db.Model):
+    __tablename__ = 'tb_chamados'
+    id_chamado = db.Column(db.Integer,primary_key=True)    
+    garantia = db.Column(db.String(3))
+    descricao_erro = db.Column(db.String(300))
+    id_equip = db.Column(db.Integer, db.ForeignKey('tb_equipamentos.id_equip'))
+    id_usuario = db.Column(db.Integer, db.ForeignKey('tb_usuarios.id'))
+    data_criacao = db.Column(db.DateTime)
+    status_chamado = db.Column(db.String(20))
+    
+    
+    def __init__(self, garantia, descricao_erro, id_equip, id_usuario, data_criacao, status_chamado):
+        self.garantia = garantia
+        self.descricao_erro = descricao_erro
+        self.id_equip = id_equip
+        self.id_usuario = id_usuario
+        self.data_criacao = data_criacao
+        self.status_chamado = status_chamado

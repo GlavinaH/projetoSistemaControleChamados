@@ -1,9 +1,10 @@
 from flask import Blueprint, render_template, redirect, flash, url_for, request
 from flask_login import login_required, current_user
 from . import db
-from .models import Equipamento, Usuario
+from .models import Equipamento, Chamado
 import psycopg2
 import psycopg2.extras
+from datetime import datetime
 
 main = Blueprint('main', __name__)
 
@@ -35,7 +36,6 @@ def get_equipamento(id):
     cur.execute(f'SELECT * FROM tb_equipamentos WHERE id_equip={id}')  
     data=cur.fetchall()
     cur.close()
-    print(data[0])
     return render_template('editar_equipamento.html', equipamento=data[0])
 
 @main.route('/update/<id>', methods=['POST'])
@@ -85,11 +85,8 @@ def submit():
     db.session.add(equipamento)
     db.session.commit()
     flash("Equipamento adicionado com sucesso.")
+    return redirect(url_for('main.meus_equipamentos'))
     
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    cur.execute(f'SELECT * FROM tb_equipamentos WHERE id_usuario={id_usuario} ORDER BY id_equip ASC')
-    lista_equipamentos=cur.fetchall()
-    return render_template("meus_equipamentos.html", lista_equipamentos=lista_equipamentos)
     
 @main.route('/meus_chamados')
 @login_required
@@ -107,25 +104,23 @@ def criar_chamado():
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     cur.execute(f'SELECT id_equip FROM tb_equipamentos WHERE id_usuario={id_usuario} ORDER BY id_equip ASC')
     id_equipamentos=cur.fetchall()
-    print(id_equipamentos)    
     return render_template('criar_chamado.html', id_equipamentos=id_equipamentos)
 
 @main.route('/submit_chamado', methods=['POST'])
 @login_required
 def submit_chamado():
-    marca = request.form['marca']
-    modelo = request.form['modelo']
-    numero_serie = request.form['numero_serie']
+    garantia = request.form['opcoesGarantia']
+    descricao_erro = request.form['descricao']
+    id_equip = request.form['idEquip']
     id_usuario = current_user.id
+    data_criacao = datetime.now()
+    status_chamado = "Em aberto"
 
-    equipamento = Equipamento(marca,modelo,numero_serie,id_usuario)
-    db.session.add(equipamento)
+    chamado = Chamado(garantia, descricao_erro, id_equip, id_usuario, data_criacao, status_chamado)
+    db.session.add(chamado)
     db.session.commit()
-    flash("Equipamento adicionado com sucesso.")
+    flash("Chamado criado com sucesso.")
+    return redirect(url_for('main.meus_chamados'))
     
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    cur.execute(f'SELECT * FROM tb_equipamentos WHERE id_usuario={id_usuario} ORDER BY id_equip ASC')
-    lista_equipamentos=cur.fetchall()
-    return render_template("meus_equipamentos.html", lista_equipamentos=lista_equipamentos)
 
 
