@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card p-4 rounded" style="max-width: 500px; margin: 0 auto; margin-top: 30px ; position: relative;">
+    <h2 class="text-center mb-4 font-weight-bold" style="font-size: x-large;">Administrador</h2>
+    <div class="list-group">
+        <a class="btn btn-secondary btn-lg" href="{{ url_for('main.meus_chamados') }}">Chamados</a>
+        <br>
+        <a class="btn btn-secondary btn-lg" href="{{ url_for('main.meus_equipamentos') }}">Equipamentos</a>
+    </div>
+
+</div>
+{% endblock %}

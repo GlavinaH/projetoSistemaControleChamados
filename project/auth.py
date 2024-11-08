@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, url_for, request, flash, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from .models import Usuario
 from . import db
 
@@ -21,7 +21,11 @@ def login_post():
     
     if not usuario or not check_password_hash(usuario.senha, senha):
         flash('Por favor verifique os dados de login e tente novamente')
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('auth.login')) 
+        
+    elif usuario.is_admin:
+        login_user(usuario, remember=lembrar_me)
+        return render_template("adm_inicio.html")        
     
     login_user(usuario, remember=lembrar_me)
     
@@ -65,7 +69,12 @@ def logout():
 @auth.route('/inicio')
 @login_required
 def inicio():
+    email = current_user.email
+    usuario = Usuario.query.filter_by(email=email).first()
+    if usuario.is_admin:
+        return render_template("adm_inicio.html")
     return render_template("inicio.html")
+
 
 
 

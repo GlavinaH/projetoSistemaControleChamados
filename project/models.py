@@ -27,6 +27,7 @@ class Usuario(UserMixin, db.Model):
     telefone = db.Column(db.String(50))
     email = db.Column(db.String(100), unique=True)
     senha = db.Column(db.String(100))
+    is_admin = db.Column(db.Boolean, default=False)
     
     def __init__(self,empresa,endereco,cidade,estado,nome,telefone,email,senha):
         self.empresa = empresa
