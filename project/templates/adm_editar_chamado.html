@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card p-4 rounded" style="max-width: 500px; margin: 0 auto; margin-top: 30px ; position: relative;">
+    <h2 class="text-center mb-4 font-weight-bold" style="font-size: x-large;">Editar Status do Chamado</h2>
+    <form action="/adm_update_chamado/{{data_chamado.id_chamado}}" method="POST">
+        <hr style="margin-top: 0;">
+        <p class="fs-6" style="text-align: center;"><strong>DADOS DO CLIENTE</strong></p>
+        <p class="fs-6"><strong>ID Cliente: </strong>{{data_usuario.id}}</p>
+        <p class="fs-6"><strong>Empresa: </strong>{{data_usuario.empresa}}</p>
+        <p class="fs-6"><strong>Endereço: </strong>{{data_usuario.endereco}}</p>
+        <p class="fs-6"><strong>Cidade: </strong>{{data_usuario.cidade}}</p>
+        <p class="fs-6"><strong>Estado: </strong>{{data_usuario.estado}}</p>
+        <p class="fs-6"><strong>Nome do contato: </strong>{{data_usuario.nome}}</p>
+        <p class="fs-6"><strong>Telefone: </strong>{{data_usuario.telefone}}</p>
+        <p class="fs-6"><strong>E-mail: </strong>{{data_usuario.email}}</p>
+        <hr>
+        <p class="fs-6" style="text-align: center;"><strong>DADOS DO EQUIPAMENTO</strong></p>
+        <p class="fs-6"><strong>ID Equipamento: </strong>{{data_equipamento.id_equip}}</p>
+        <p class="fs-6"><strong>Marca: </strong>{{data_equipamento.marca}}</p>
+        <p class="fs-6"><strong>Modelo: </strong>{{data_equipamento.modelo}}</p>
+        <p class="fs-6"><strong>Número de Série: </strong>{{data_equipamento.numero_serie}}</p>                
+        <hr>
+        <p class="fs-6" style="text-align: center;"><strong>DADOS DO CHAMADO</strong></p>
+        <p class="fs-6"><strong>ID Chamado: </strong>{{data_chamado.id_chamado}}</p>
+        <p class="fs-6"><strong>Data de Criação: </strong>{{data_chamado.data_criacao}}</p>
+        <p class="fs-6"><strong>Garantia: </strong>{{data_chamado.garantia}}</p>
+        <p class="fs-6"><strong>Descrição do Erro: </strong>{{data_chamado.descricao_erro}}</p>
+        <hr>
+        <p class="fs-6" style="text-align: center;"><strong>STATUS DO CHAMADO</strong></p>
+        <select name="statusChamado" id="statusChamado" class="form-select">
+            <option selected style="font-weight: bold;">Alterar o status do chamado - {{data_chamado.status_chamado}}</option>
+                <option value="Agendado">Agendado</option>
+                <option value="Concluído">Concluído</option>
+                <option value="Em Aberto">Em Aberto</option>
+        </select>
+        <div class="form-group" style="text-align: right;margin-top: 20px;" >
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a class="btn btn-secondary" href="{{ url_for('main.adm_chamados') }}">Voltar</a>
+        </div>
+    </form>        
+    </div>
+</div>
+{% endblock %}

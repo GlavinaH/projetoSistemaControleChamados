@@ -122,5 +122,44 @@ def submit_chamado():
     flash("Chamado criado com sucesso.")
     return redirect(url_for('main.meus_chamados'))
     
+@main.route('/adm_chamados')
+@login_required
+def adm_chamados():
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur.execute(f'SELECT * FROM tb_chamados ORDER BY id_chamado ASC')
+    lista_chamados=cur.fetchall()
+    return render_template("adm_chamados.html", lista_chamados=lista_chamados)
 
+@main.route('/adm_edit_chamado/<id>', methods=['POST','GET'])
+@login_required
+def get_chamado(id):
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur.execute(f'SELECT * FROM tb_chamados WHERE id_chamado={id}')  
+    data_chamado=cur.fetchall()
+    cur.close()
+    id_usuario_chamado = data_chamado[0][3]
+    id_equipamento_chamado = data_chamado[0][2]
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur.execute(f'SELECT * FROM tb_usuarios WHERE id={id_usuario_chamado}')  
+    data_usuario=cur.fetchall()
+    cur.close()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur.execute(f'SELECT * FROM tb_equipamentos WHERE id_equip={id_equipamento_chamado}')  
+    data_equipamento=cur.fetchall()
+    cur.close()
+    return render_template('adm_editar_chamado.html', data_chamado=data_chamado[0], data_usuario=data_usuario[0], data_equipamento=data_equipamento[0])
 
+@main.route('/adm_update_chamado/<id>', methods=['POST'])
+@login_required
+def update_chamado(id):
+    if request.method == 'POST':
+        status_chamado = request.form['statusChamado']
+                
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur.execute(f'''UPDATE tb_chamados
+                        SET status_chamado='{status_chamado}'
+                        WHERE id_chamado={id}''')
+        cur.execute(f'SELECT * FROM tb_chamados ORDER BY id_equip ASC')       
+        flash("Status do chamado atualizado com sucesso.")
+        conn.commit()
+        return redirect(url_for('main.adm_chamados'))
