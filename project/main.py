@@ -75,7 +75,7 @@ def criar_equipamento():
     
 @main.route('/submit_equipamento', methods=['POST'])
 @login_required
-def submit():
+def submit_equipamento():
     marca = request.form['marca']
     modelo = request.form['modelo']
     numero_serie = request.form['numero_serie']
@@ -122,7 +122,7 @@ def submit_chamado():
     flash("Chamado criado com sucesso.")
     return redirect(url_for('main.meus_chamados'))
     
-@main.route('/adm_chamados')
+@main.route('/adm_chamados', methods=['POST','GET'])
 @login_required
 def adm_chamados():
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -132,7 +132,7 @@ def adm_chamados():
 
 @main.route('/adm_edit_chamado/<id>', methods=['POST','GET'])
 @login_required
-def get_chamado(id):
+def adm_get_chamado(id):
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     cur.execute(f'SELECT * FROM tb_chamados WHERE id_chamado={id}')  
     data_chamado=cur.fetchall()
@@ -151,7 +151,7 @@ def get_chamado(id):
 
 @main.route('/adm_update_chamado/<id>', methods=['POST'])
 @login_required
-def update_chamado(id):
+def adm_update_chamado(id):
     if request.method == 'POST':
         status_chamado = request.form['statusChamado']
                 

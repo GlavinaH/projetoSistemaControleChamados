@@ -27,7 +27,6 @@ class Usuario(UserMixin, db.Model):
     telefone = db.Column(db.String(50))
     email = db.Column(db.String(100), unique=True)
     senha = db.Column(db.String(100))
-    is_admin = db.Column(db.Boolean, default=False)
     
     def __init__(self,empresa,endereco,cidade,estado,nome,telefone,email,senha):
         self.empresa = empresa
@@ -38,6 +37,16 @@ class Usuario(UserMixin, db.Model):
         self.telefone = telefone
         self.email = email
         self.senha = senha     
+
+class Admin(UserMixin, db.Model):
+    __tablename__='tb_admin'
+    id = db.Column(db.Integer,primary_key=True)
+    email = db.Column(db.String(100), unique=True)
+    senha = db.Column(db.String(100))
+    
+    def __init__(self,email,senha):
+        self.email = email
+        self.senha = senha    
 
 class Chamado(db.Model):
     __tablename__ = 'tb_chamados'

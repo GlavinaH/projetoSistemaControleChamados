@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, url_for, request, flash, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
-from .models import Usuario
+from .models import Usuario, Admin
 from . import db
 
 
@@ -10,6 +10,10 @@ auth = Blueprint('auth', __name__, template_folder='templates')
 @auth.route('/login')
 def login():
     return render_template('login.html')
+
+@auth.route('/login_adm')
+def login_adm():
+    return render_template('login_adm.html')
 
 @auth.route('/login', methods=['POST'])
 def login_post():
@@ -21,15 +25,28 @@ def login_post():
     
     if not usuario or not check_password_hash(usuario.senha, senha):
         flash('Por favor verifique os dados de login e tente novamente')
-        return redirect(url_for('auth.login')) 
+        return redirect(url_for('auth.login'))  
         
-    elif usuario.is_admin:
-        login_user(usuario, remember=lembrar_me)
-        return render_template("adm_inicio.html")        
-    
     login_user(usuario, remember=lembrar_me)
     
     return redirect(url_for('auth.inicio'))
+            
+@auth.route('/login_adm', methods=['POST'])
+def login_adm_post():
+    email = request.form.get('email')
+    senha = request.form.get('senha')
+    lembrar_me = True if request.form.get('lembrar_me') else False
+    
+    admin = Admin.query.filter_by(email=email).first()
+    
+    if admin and check_password_hash(admin.senha, senha):  
+        login_user(admin, remember=lembrar_me)
+        print(current_user.id)  
+        return redirect(url_for('auth.inicio_adm'))
+    else:  
+        flash('Por favor verifique os dados de login e tente novamente')  
+        return redirect(url_for('auth.login_adm'))  
+            
 
 @auth.route('/signup')
 def signup():
@@ -69,12 +86,12 @@ def logout():
 @auth.route('/inicio')
 @login_required
 def inicio():
-    email = current_user.email
-    usuario = Usuario.query.filter_by(email=email).first()
-    if usuario.is_admin:
-        return render_template("adm_inicio.html")
     return render_template("inicio.html")
 
+@auth.route('/inicio_adm')
+@login_required
+def inicio_adm():
+    return render_template("adm_inicio.html")
 
 
 
